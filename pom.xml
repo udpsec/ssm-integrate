@@ -159,13 +159,6 @@
             <version>1.1.10</version>
         </dependency>
 
-		<!--&lt;!&ndash; c3p0 &ndash;&gt;-->
-		<!--<dependency>-->
-			<!--<groupId>com.mchange</groupId>-->
-			<!--<artifactId>c3p0</artifactId>-->
-			<!--<version>0.9.5.2</version>-->
-		<!--</dependency>-->
-
 		<!-- mchange-commons-java -->
 		<dependency>
 			<groupId>com.mchange</groupId>
