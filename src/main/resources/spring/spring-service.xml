@@ -26,7 +26,7 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
-    <!--通知 -->
+<!--    &lt;!&ndash;通知 &ndash;&gt;
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <tx:attributes>
             <tx:method name="add*" isolation="REPEATABLE_READ" rollback-for="Exception"/>
@@ -37,12 +37,12 @@
             <tx:method name="*"/>
         </tx:attributes>
     </tx:advice>
-    <!--8、aop管理事物-->
+    &lt;!&ndash;8、aop管理事物&ndash;&gt;
     <aop:config>
         <aop:pointcut expression="execution(* com.inofd.ssm.service..*.*(..))" id="serviceMethod"/>
         <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethod"/>
-    </aop:config>
+    </aop:config>-->
 
     <!-- 配置基于注解的声明式事务 -->
-    <!--<tx:annotation-driven transaction-manager="transactionManager"/>-->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
 </beans>
