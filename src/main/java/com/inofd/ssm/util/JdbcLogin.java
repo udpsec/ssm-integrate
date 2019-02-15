@@ -1,4 +1,4 @@
-package com.inofd.ssm.utils;
+package com.inofd.ssm.util;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

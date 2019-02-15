@@ -16,7 +16,8 @@
 		<junit.version>4.12</junit.version>
 		<!-- mybatis版本号 -->
 		<mybatis.version>3.4.6</mybatis.version>
-
+		<!-- plugin版本号 -->
+		<plugin.version>2.5</plugin.version>
 	</properties>
 
 	<dependencies>
@@ -135,7 +136,7 @@
 		<dependency>
 			<groupId>com.github.pagehelper</groupId>
 			<artifactId>pagehelper</artifactId>
-			<version>5.1.6</version>
+			<version>5.1.8</version>
 		</dependency>
 
 		<!-- mybatis逆向工程插件 -->
@@ -149,7 +150,7 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.46</version>
+			<version>6.0.6</version>
 		</dependency>
 
         <!-- 阿里druid数据连接池 -->
@@ -203,12 +204,6 @@
 			<version>1.2</version>
 		</dependency>
 
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>2.9.8</version>
-		</dependency>
-
 		<!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
@@ -232,7 +227,104 @@
 		<dependency>
 			<groupId>cn.hutool</groupId>
 			<artifactId>hutool-all</artifactId>
-			<version>4.4.0</version>
+			<version>4.4.5</version>
 		</dependency>
 	</dependencies>
+	<build>
+		<plugins>
+			<!-- jetty 热部署 -->
+            <plugin>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>8.1.16.v20140903</version>
+                <configuration>
+                    <stopKey>stop</stopKey>
+                    <stopPort>9999</stopPort>
+                    <scanIntervalSeconds>0</scanIntervalSeconds><!--使用jetty自身的热部署：1 不用为0-->
+                    <contextXml>${project.basedir}/src/main/resources/jetty-context.xml</contextXml>
+                    <webApp>
+                        <contextPath>/</contextPath>
+                    </webApp>
+                    <connectors>
+                        <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
+                            <port>8001</port>
+                            <maxIdleTime>60000</maxIdleTime>
+                        </connector>
+                    </connectors>
+                </configuration>
+            </plugin>
+			<!-- 插件使用练习 -->
+			<!-- 清理插件的使用，maven3.0.4会默认使用2.4.1版本的clean插件 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>${plugin.version}</version>
+				<executions>
+					<execution>
+						<id>auto-clean</id>
+						<!-- clean生命周期clean阶段 -->
+						<phase>clean</phase>
+						<goals>
+							<!-- 执行clean插件的clean目标 -->
+							<goal>clean</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- maven-resources-plugin在maven3.0.4中默认使用2.5版本的resources -->
+
+			<!-- 编译插件的使用，maven3.0.4会默认使用2.3.2版本的compile插件 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${plugin.version}</version>
+				<configuration>
+					<!-- 源代码使用的jdk版本 -->
+					<source>1.8</source>
+					<!-- 构建后生成class文件jdk版本 -->
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+
+			<!-- maven-surefire-plugin插件，maven3.0.4默认使用2.10版本的surefire插件 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${plugin.version}</version>
+				<configuration>
+					<!-- 改变测试报告生成目录 ，默认为target/surefire-reports-->
+					<!-- project.build.directory表示maven的属性，这里指的是构建的目录下面test-reports，project.build.directory就是pom标签的值 -->
+					<reportsDirectory>${project.build.directory}/test-reports</reportsDirectory>
+				</configuration>
+			</plugin>
+
+			<!-- war包插件的使用，maven3.0.4会默认使用xxx版本的war插件，建议配置编码格式和打包名称 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<!-- 利用属性传递版本号 -->
+				<version>${plugin.version}</version>
+				<configuration>
+					<!-- 设置编码 -->
+					<!--                    <encoding>UTF-8</encoding>-->
+					<!-- 设置名称 -->
+					<warName>ROOT</warName>
+				</configuration>
+			</plugin>
+
+			<!-- maven-install-plugin插件一般不需要配置,maven3.0.4默认使用2.3.1版本的install插件 -->
+
+			<!-- 部署插件的使用，maven3.0.4会默认使用2.7版本的deploy插件 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>${plugin.version}</version>
+				<configuration>
+					<!-- 更新元数据 -->
+					<updateReleaseInfo>true</updateReleaseInfo>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
