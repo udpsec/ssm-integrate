@@ -150,7 +150,7 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>6.0.6</version>
+			<version>5.1.46</version>
 		</dependency>
 
         <!-- 阿里druid数据连接池 -->
@@ -211,6 +211,13 @@
 			<version>1.2.54</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.9.8</version>
+		</dependency>
+
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-client</artifactId>
@@ -233,27 +240,30 @@
 	<build>
 		<plugins>
 			<!-- jetty 热部署 -->
-            <plugin>
-                <groupId>org.mortbay.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
-                <version>8.1.16.v20140903</version>
-                <configuration>
-                    <stopKey>stop</stopKey>
-                    <stopPort>9999</stopPort>
-                    <scanIntervalSeconds>0</scanIntervalSeconds><!--使用jetty自身的热部署：1 不用为0-->
-                    <contextXml>${project.basedir}/src/main/resources/jetty-context.xml</contextXml>
-                    <webApp>
-                        <contextPath>/</contextPath>
-                    </webApp>
-                    <connectors>
-                        <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
-                            <port>8001</port>
-                            <maxIdleTime>60000</maxIdleTime>
-                        </connector>
-                    </connectors>
-                </configuration>
-            </plugin>
-			<!-- 插件使用练习 -->
+			<plugin>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>9.4.14.v20181114</version>
+				<configuration>
+					<!--自动发现改变是时间，进行热部署，默认是0，不热部署-->
+					<scanIntervalSeconds>0</scanIntervalSeconds>
+					<!--手动重加载 可选值 ：[automatic|manual]-->
+					<reload>automatic</reload>
+					<httpConnector>
+						<port>8097</port>
+						<idleTimeout>30000</idleTimeout>
+					</httpConnector>
+					<webApp>
+						<contextPath>/</contextPath>
+					</webApp>
+					<webAppSourceDirectory>src/main/webapp</webAppSourceDirectory>
+					<!--
+                    jetty9.3+版本的默认字符集已使用UTF-8，无需再进行配置
+                    https://github.com/eclipse/jetty.project/issues/804
+                    -->
+				</configuration>
+			</plugin>
+
 			<!-- 清理插件的使用，maven3.0.4会默认使用2.4.1版本的clean插件 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

@@ -13,5 +13,15 @@
 
         <!-- 开启驼峰命名转换:Table{create_time} -> Entity{createTime} -->
         <setting name="mapUnderscoreToCamelCase" value="true"/>
+
     </settings>
+<!--    <typeAliases>
+        <package name="com.inofd.ssm.entity"></package>
+    </typeAliases>-->
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+            <!--请求的页码超出边界时(用户干预)，能正常显示; < 1时，显示首页; 超出最大页数，显示尾页 -->
+            <property name="reasonable" value="true"/>
+        </plugin>
+    </plugins>
 </configuration>
